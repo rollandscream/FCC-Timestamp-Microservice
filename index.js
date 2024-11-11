@@ -24,12 +24,33 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/:date", function (req, res) {
-  var date = new Date(req.params.date);
+app.get("/api", function (req, res) {
+  date = new Date();
   res.json({
     unix: date.getTime(),
     utc: date.toUTCString()
   });
+})
+
+app.get("/api/:date", function (req, res) {
+  let date;
+  if (new Date(req.params.date) == "Invalid Date") {
+    if (req.params.date.match(/^[0-9]+$/) == null) {
+      return res.json({
+        error: "Invalid Date"
+        });
+    } else {
+      date = new Date(parseInt(req.params.date));
+    }
+  } else {
+    date = new Date(req.params.date);
+  }
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
+  
 })
 
 
